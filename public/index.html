@@ -1,0 +1,549 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        .errorMessage{
+            color: red;
+            display: none;
+        }
+        tr:not(#cartCheckout) td button{
+           background: none;
+            border: none;
+            color:#007bff;
+            font-size: 20px;
+        }
+        #cartTotal{
+            color:#007bff;
+            text-transform: capitalize;
+            font-size: larger;
+            font-weight: bold;
+            background-color: transparent;
+
+        }
+        #cartTotal td:first-child{
+            border:none;
+        }
+
+        .showOnHover {
+            display:none;
+        }
+
+        tr td:last-child, tr th:last-child{
+            width: 60px;
+        }
+
+        tr:hover .showOnHover{
+            display:block;
+        }
+
+        #cartCheckout {
+            background-color: transparent;
+        }
+
+        #cartCheckout td{
+            border: none;
+        }
+
+        #cartCheckout td:last-child button{
+            width: 100%;
+        }
+
+        input[type="file"] {
+            padding: 0;
+            height: 100%;
+        }
+
+        div.container {
+            width: 100%;
+            border: 1px solid gray;
+            padding: 0;
+
+        }
+
+        header, footer {
+            padding: 1em;
+            color: white;
+            background-color: black;
+            clear: left;
+            text-align: center;
+        }
+
+        nav {
+            float: left;
+            max-width: 200px;
+            margin: 0;
+            padding: 1em;
+        }
+
+        nav ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        nav ul a {
+            text-decoration: none;
+        }
+
+        article {
+            margin-left: 170px;
+            border-left: 1px solid gray;
+            padding: 1em;
+            overflow: hidden;
+            height: 80vh;
+            overflow-y: auto;
+        }
+
+        table {
+            border: none;
+            font-family: arial, sans-serif;
+            border-collapse: collapse;
+            width: 100%;
+        }
+
+        td, th {
+            border: 1px solid #dddddd;
+            text-align: left;
+            padding: 8px;
+        }
+
+        tr:nth-child(even) {
+            background-color: #dddddd;
+        }
+    </style>
+
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha384-tsQFqpEReu7ZLhBV2VZlAu7zcOV+rXbYlF2cqB8txI/8aZajjp4Bqd+V6D5IgvKT" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+
+    <script type="text/javascript" language="javascript">
+        var headers = [
+            "Product Name", "Price", "Picture", "Quantity", ""];
+        var Cartheaders = [
+            "Product Name", "Price", "Picture", "Quantity","Total", ""];
+
+        var existingProductNames = [];
+
+        $(document).ready(function () {
+            getProducts();
+        });
+        function getCart() {
+            hideAll();
+            $("#products").hide();
+            $("#cart").show();
+            $.ajax({
+                dataType: "json",
+                url: "/cart",
+                success: function (data) {
+                    displayCart(data, "cart");
+                },
+                error(){
+
+                }
+            });
+        }
+
+        function getProducts() {
+            hideAll();
+            $("#products").show();
+            $("#cart").hide();
+            $.ajax({
+                dataType: "json",
+                url: "/getProducts",
+                success: function (data) {
+                    displayProducts(data, "products");
+                }
+            });
+
+
+        }
+        function hideAll(){
+            $("#login").hide();
+            $("#register").hide();
+            $("#newProduct").hide();
+            $("#products").hide();
+            $("#cart").hide();
+        }
+        function showLogin() {
+            hideAll();
+            $("#login").show();
+
+        }
+
+        function showRegister() {
+            hideAll();
+            $("#register").show();
+
+        }
+        function showNewProduct() {
+            hideAll();
+            $("#newProduct").show();
+
+        }
+
+        function addToCart(prodid, fieldname) {
+            var num = document.getElementById(fieldname).value;
+            var dat = {
+                id: prodid,
+                qty : num
+            };
+            $.ajax
+            ({
+                type: "POST",
+                url: "/cart",
+                contentType: 'application/json',
+
+                //json object to sent to the authentication url
+                data: JSON.stringify(dat),
+                success: function () {
+
+                    alert("Thanks!");
+                }
+            });
+
+
+        }
+        function checkout() {
+
+
+            $.post(
+                    "/checkout",
+                    {
+                    },
+                    function (data) {
+                        $('#cartmessage').html(data);
+                    }
+            );
+
+        }
+
+        function deleteCartItem(productId) {
+
+            $.ajax
+            ({
+                type: "DELETE",
+                url: "/cart/" + productId ,
+                contentType: 'application/x-www-form-urlencoded',
+                success: function () {
+
+                    getCart();
+                }
+            });
+
+
+        }
+
+        function myFunction(itemNo) {
+            str = JSON.stringify(products[itemNo]);
+            window.alert("You selected " + str);
+        }
+        function displayProducts(products, name) {
+
+            existingProductNames = [];
+
+            var out = "<table width=100%>";
+            var i;
+            out += '<tr style="font-size: 20px;" >';
+            for (i = 0; i < headers.length; i++) {
+                out += '<th >' + headers[i] + '</th>';
+            }
+            out += "</tr>";
+            for (i = 0; i < products.length; i++) {
+                existingProductNames.push(products[i].name.toLowerCase().replace(/\s/g, ''));
+                out += "<tr>";
+                out += '<td>' + products[i].name + '</td>';
+                out += '<td>&#x20AC;' + products[i].price + '</td>';
+                out += '<td> <img src="';
+                out += "http://localhost:3002/" + products[i].image + '" style="width:104px;height:100px;">';
+                out += '<td>' + ' <input type="text" value="1" name="';
+                out += 'quantity' + i + '" id="quant' + i
+                out += '">' + '</td>';
+
+                out += '<td> <button class="showOnHover" onclick="addToCart(' + products[i].productID;
+                out += ",'quant" + i + "')" + '"><i class="fas fa-cart-plus"></i></button></td>';
+                out += "</tr>";
+            }
+            out += "</table>";
+            document.getElementById(name).innerHTML = out;
+        }
+
+        function displayCart(cart, name) {
+            var out = "<h1> Shopping Cart</h1><table border=1 width=100%>";
+            var i;
+            out += '<tr style="font-size: 20px;" >';
+            for (i = 0; i < Cartheaders.length; i++) {
+                out += '<th >' + Cartheaders[i] + '</th>';
+            }
+            out += "</tr>";
+            var total=0;
+            for (i = 0; i < cart.length; i++) {
+                out += "<tr>";
+                out += '<td>' + cart[i].name + '</td>';
+                out += '<td>&#x20AC;' + cart[i].price + '</td>';
+                out += '<td> <img src="';
+                out += "http://localhost:3002/" + cart[i].image + '" style="width:104px;height:100px;">';
+                out += '<td>' + cart[i].quantity + '</td>';
+                out += '<td>&#x20AC;' + cart[i].price* cart[i].quantity + '</td>';
+                out += '<td> <button class="showOnHover" onclick="deleteCartItem(' + cart[i].productID;
+                out1 = ")" + '"><i class="fas fa-trash-alt"></i></button></td>';
+                out += out1;
+                out += "</tr>";
+                total += cart[i].price* cart[i].quantity;
+            }
+            out += '<tr id="cartTotal"> <td colspan="3"></td>';
+            out += '<td>Total:</td>';
+            out += '<td colspan="2"> &#x20AC;'+ total.toFixed(2) +'</td></tr>';
+            out += '<tr id="cartCheckout"> <td colspan="4"></td>';
+            out += '<td colspan="2"><button type="button" class="btn btn-primary btn-lg" onclick="checkout()">Checkout</button></td>';
+            out += '</tr>';
+            out += "</table>";
+
+            out+='<div id="cartmessage"></div>';
+            document.getElementById(name).innerHTML = out;
+        }
+
+        //displayProducts(productsData,"products");
+    </script>
+
+
+    <script>
+
+
+        $(document).ready(function () {
+            $('#logonForm').on( "submit",function(event) {
+
+                event.preventDefault();
+                $("#login").hide();
+
+                var o={};
+                var a = $('#logonForm').serializeArray();
+                $.each(a, function() {
+                    if (o[this.name] !== undefined) {
+                        if (!o[this.name].push) {
+                            o[this.name] = [o[this.name]];
+                        }
+                        o[this.name].push(this.value || '');
+                    } else {
+                        o[this.name] = this.value || '';
+                    }
+                });
+                var fd =JSON.stringify(o);
+                console.log(fd);
+                $.ajax
+                ({
+                    type: "POST",
+                    url: "/login",
+                    contentType: 'application/json',
+                    data: fd,
+                    success: function () {
+
+                        alert("Thanks!");
+                    }
+                });
+
+
+
+            });
+            $('#registerForm').on( "submit",function(event) {
+
+                event.preventDefault();
+                $("#register").hide();
+                var o={};
+                var a = $('#registerForm').serializeArray();
+                $.each(a, function() {
+                    if (o[this.name] !== undefined) {
+                        if (!o[this.name].push) {
+                            o[this.name] = [o[this.name]];
+                        }
+                        o[this.name].push(this.value || '');
+                    } else {
+                        o[this.name] = this.value || '';
+                    }
+                });
+                var fd =JSON.stringify(o);
+                console.log(fd);
+                $.ajax
+                ({
+                    type: "POST",
+                    url: "/register",
+                    contentType: 'application/json',
+                    data: fd,
+                    success: function () {
+
+                        alert("Thanks!");
+                    }
+                });
+
+            });
+            $('#productName').on( "keyup",function(event) {
+                if(existingProductNames.indexOf(this.value.toLowerCase().replace(/\s/g, ''))>=0){
+                    $('#nameErrorMessage').css('display', 'block');
+                }else{
+                    $('#nameErrorMessage').css('display', 'none');
+                }
+            });
+
+
+            $('#newProductForm').on( "submit",function(event) {
+
+                event.preventDefault();
+
+                var file    = document.querySelector('input[type=file]').files[0];
+                var fileReader = new FileReader();
+
+                fileReader.readAsArrayBuffer(file);
+                fileReader.onload = imgLoaded;
+
+            });
+
+            function imgLoaded(evt) {
+                //var fd = formToJson($('#newProductForm'));
+                var form = document.forms.namedItem("newProductForm");
+                var fd = new FormData(form);
+                fd.append("file", evt.target.result);
+                $.ajax
+                ({
+                    type: "POST",
+                    url: "/newProduct",
+                    cache       : false,
+                    contentType : false,
+                    processData : false,
+                    data: fd,
+                    success: function () {
+
+                        alert("Product added");
+                    }
+                });
+
+                $("#newProductForm").get(0).reset();
+            }
+
+            function formToJson(form){
+                var formItems = $(form).serializeArray();
+                var json = {};
+
+                $.each(formItems, function() {
+                    json[this.name] = this.value || '';
+                });
+
+                return json;
+
+            }
+            getProducts();
+            $("#login").hide();
+            $('#register').hide();
+            $("#newProduct").hide();
+        });
+    </script>
+</head>
+<body>
+
+<div class="container">
+
+    <header>
+        <h1>Shop</h1>
+    </header>
+
+    <nav>
+        <ul class="nav flex-column">
+            <li class="nav-item">
+                <a class="nav-link" href="#" onclick="getProducts()">Show Products</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#" onclick="getCart()">Show Cart</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#" onclick="showLogin()">Login</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#" onclick="showRegister()">Register</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#" onclick="showNewProduct()">New Product</a>
+            </li>
+
+        </ul>
+    </nav>
+
+    <article>
+
+        <div id="cart"></div>
+        <div id="products"></div>
+        <div id="logonmessage"></div>
+
+        <div id="login">
+            <h1>Login</h1>
+            <p>
+
+            <form id="logonForm" action="">
+
+                Name:<br>
+                <input type="text" name="name" value="">
+                <br>
+                Password:<br>
+                <input type="text" name="password" value="">
+                <br>
+                <br>
+            <input type="submit">
+            </form>
+        </div>
+        <div id="register">
+            <h1>Register</h1>
+            <p>
+
+            <form id="registerForm" action="">
+
+                Name:<br>
+                <input type="text" name="name" value="">
+                <br>
+                Address:<br>
+                <input type="text" name="address" value="">
+                <br>
+                Password:<br>
+                <input type="text" name="password" value="">
+                <br>
+                <br>
+                <input type="submit">
+            </form>
+        </div>
+        <div id="newProduct">
+            <h1>New Product</h1>
+            <p>
+
+            <form id="newProductForm" action="" name="newProductForm">
+                <div class="form-group">
+                    <label for="productName">Name:</label>
+                    <input id="productName" type="text" name="name" minlength="1" maxlength="30" size="30" value="" class="form-control" required>
+                    <div id="nameErrorMessage" class="errorMessage">Name already exists</div>
+                </div>
+
+                <div class="form-group mb-3">
+                    <label for="productPrice">Price:</label>
+                    <div style="display: flex">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">&#8364;</span>
+                        </div>
+                        <input id="productPrice" type="text" pattern="([0-9]{0,5}(\.[0-9]{2})?)|[0-9]{0,5}" title="Invalid format (expected: xxxxx.xx)" name="productPrice" minlength="1" maxlength="8" size="8" class="form-control" value="" required>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="productQuantity">Quantity:</label>
+                    <input id="productQuantity" type="text" pattern="\d*"  minlength="1" maxlength="10" size="10" name="productQuantity" class="form-control" value="" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="productImage">Product Image:</label>
+                    <input id="productImage" type="file" name="productImage" class="form-control" value="" required>
+                </div>
+
+                <input class="btn btn-primary" type="submit">
+            </form>
+        </div>
+    </article>
+</div>
+</body>
+</html>

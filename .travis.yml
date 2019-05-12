@@ -1,9 +1,9 @@
 language: node_js
 services:
   - docker
-secure: "LkoXZSBgrIDwx4CeGpMdxA9/YCq9SjnIQmpuXTme14SaiNYSIdNugZHZrtmmKL4A9Imv3qXh9ilHvfJNWZI4KBtPCidHDEsVoUJOt9301FluqEyJF48OF4xzSmSAi6rxzaS0wjqGANPrhHG1jkAlZxhtwnvLcOEtzawDsVp1Uvs8RAuPTDiqC6b9iGBtSb8ANefiEVE5wam6/UtyuFMDdEPIdTO9NxlCGAukaCbGbUufPRyHiXIkBK7qfCDqxhKWwtUzMU8i7K8UPmSilNUrn5u0USzz3mxIrcO0qQUB7RNenjwaogql+EVzL2M7b7S0bZrEI3WXIkZwaTWG4t8oV1OIsQ2sq9chx7mWDM8kWW3YiXC5P8nrHzkY9jNKPhZwi0gcEC/3XL05RIteHB3OKWKna9JrTkKZoXH25GG/PDOkiUDxoWjOB65LBYSG7hEsV+UdTROLdxTP27Bn9QDhNB8aflGtjRuqDgMumElUEQpDxP3kd7tnfGPXPs+dxsMmFAvJ0ZAynP2berbWVHonCGF3vUMe0ldFGer7uGWG1TlQ7Jeai0xGgx6iH9UqFxHWy39PwJDZiG6oP4dNgKHmn2dYOVH936rqLsdop1iB4uiAyJiKHeX/ryJvomHdwXyKFhhrhMbdlx21wKPcshWI/2hJ66CQELI/ORqtppUrveM="
 before_install:
-  - openssl aes-256-cbc -K $encrypted_23be3aed30c7_key -iv $encrypted_23be3aed30c7_iv -in client-secret.json.enc -out client-secret.json -d
+  - openssl aes-256-cbc -K $encrypted_23be3aed30c7_key -iv $encrypted_23be3aed30c7_iv -in credentials.tar.gz.enc -out credentials.tar.gz -d
+  - tar -xzf credentials.tar.gz
   - gcloud auth activate-service-account --key-file client-secret.json
   - gcloud docker -- push gcr.io/microsevices-shop/frontend-node:v1
 

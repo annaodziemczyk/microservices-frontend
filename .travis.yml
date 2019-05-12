@@ -1,6 +1,11 @@
 language: node_js
 services:
   - docker
+env:
+  global:
+    - GOOGLE_APPLICATION_CREDENTIALS=~/gcloud-service-key.json
+    - PROJECT_NAME_PRD=microservices-shop
+    - DOCKER_IMAGE_NAME=frontend-node
 cache:
   directories:
     - "$HOME/google-cloud-sdk/"

@@ -8,8 +8,8 @@ spec:
     metadata:
       labels:
         app: front-end
-  spec:
-    containers:
-      - name: frontend-node
-        image: gcr.io/microservices-shop/frontend-node:v1
-        imagePullPolicy: Always
+    spec:
+      containers:
+        - name: frontend-node
+          image: gcr.io/microservices-shop/frontend-node:v1
+          imagePullPolicy: Always

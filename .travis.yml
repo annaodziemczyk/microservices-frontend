@@ -5,11 +5,11 @@ env:
   global:
     - GOOGLE_APPLICATION_CREDENTIALS=~/gcloud-service-key.json
     - PROJECT_NAME_PRD=microservices-shop
-    - CLUSTER_NAME_PRD=front-end
+    - CLUSTER_NAME_PRD=font-end
     - CLOUDSDK_COMPUTE_ZONE=europe-west2-a
     - DOCKER_IMAGE_NAME=frontend-node
-    - KUBE_DEPLOYMENT_NAME=front-end
-    - KUBE_DEPLOYMENT_CONTAINER_NAME=front-end
+    - KUBE_DEPLOYMENT_NAME=frontend-node
+    - KUBE_DEPLOYMENT_CONTAINER_NAME=frontend-node
     - NODE_ENV=CI
 before_deploy:
   - if [ ! -d "$HOME/google-cloud-sdk/bin" ]; then rm -rf $HOME/google-cloud-sdk; export CLOUDSDK_CORE_DISABLE_PROMPTS=1; curl https://sdk.cloud.google.com | bash; fi

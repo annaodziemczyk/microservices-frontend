@@ -5,10 +5,10 @@ env:
   global:
     - GOOGLE_APPLICATION_CREDENTIALS=~/gcloud-service-key.json
     - PROJECT_NAME_PRD=microservices-shop
-    - CLUSTER_NAME_PRD=font-end
+    - CLUSTER_NAME_PRD=front-end
     - CLOUDSDK_COMPUTE_ZONE=europe-west2-a
     - DOCKER_IMAGE_NAME=frontend-node
-    - KUBE_DEPLOYMENT_NAME=front-end
+    - KUBE_DEPLOYMENT_NAME=frontend-node
     - KUBE_DEPLOYMENT_CONTAINER_NAME=frontend-node
     - NODE_ENV=CI
 before_deploy:

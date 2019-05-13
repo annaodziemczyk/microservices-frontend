@@ -3,7 +3,7 @@ set -e
 
 docker build -t gcr.io/${PROJECT_NAME_PRD}/${DOCKER_IMAGE_NAME}:$TRAVIS_COMMIT .
 
-echo $GCLOUD_SERVICE_KEY_PRD | base64 --decode -i > ${HOME}/client-secret.json
+echo $GCLOUD_SERVICE_KEY | base64 --decode -i > ${HOME}/client-secret.json
 gcloud auth activate-service-account --key-file ${HOME}/client-secret.json
 
 gcloud --quiet config set project $PROJECT_NAME_PRD

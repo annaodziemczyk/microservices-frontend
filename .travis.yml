@@ -6,7 +6,8 @@ env:
     - GOOGLE_APPLICATION_CREDENTIALS=~/gcloud-service-key.json
     - PROJECT_NAME_PRD=microservices-shop
     - DOCKER_IMAGE_NAME=frontend-node
-
+script:
+  - npm test
   deploy:
   - provider: script
     script: ./deploy-production.sh

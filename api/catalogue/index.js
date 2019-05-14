@@ -14,10 +14,10 @@
 
   app.post("/newProduct", function(req,res){
     console.log(req.fields);
-    req.fields["file"] = fs.createReadStream(req.files["productImage"].path);
+    req.fields["file"] = fs.createReadStream(req.files["image"].path);
 
     request.post({
-      url:     endpoints.newProductUrl,
+      url:     endpoints.catalogueProductUrl,
       encoding: 'binary',
       formData: req.fields,
     }, function(error, response, body){
@@ -27,7 +27,7 @@
   });
 
   app.get("/getProducts", function (req, res, next) {
-    var x = endpoints.catalogueUrl+"/getProducts" ;//+ req.url.toString();
+    var x = endpoints.catalogueProductUrl ;//+ req.url.toString();
     console.log("getProducts "+x);
     helpers.simpleHttpRequest(x
      , res, next);

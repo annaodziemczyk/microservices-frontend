@@ -13,7 +13,7 @@
     "epimetheus": "^1.0.92",
     "express": "^4.13.4",
     "express-formidable": "^1.2.0",
-    "express-session": "^1.13.0",
+    "express-session": "^1.16.1",
     "finalhandler": "^0.4.1",
     "jquery": "^1.9.1",
     "morgan": "^1.7.0",

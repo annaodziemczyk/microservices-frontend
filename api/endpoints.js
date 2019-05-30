@@ -12,7 +12,7 @@
     customersUrl:  "http://localhost:8080/customers",
     addressUrl:    "http://localhost:8080/addresses",
     cardsUrl:      "http://localhost:8080/cards",
-    loginUrl:      "http://localhost:3001/login",
-    registerUrl:   "http://localhost:3001/register",
+    loginUrl:      "http://localhost:3001/api/login",
+    registerUrl:   "http://localhost:3001/api/register",
   };
 }());

@@ -321,17 +321,17 @@
                 var o={};
                 var a = $('#logonForm').serializeArray();
                 $.each(a, function() {
-                    if (o[this.name] !== undefined) {
-                        if (!o[this.name].push) {
-                            o[this.name] = [o[this.name]];
+                    if (o[this.username] !== undefined) {
+                        if (!o[this.username].push) {
+                            o[this.username] = [o[this.username]];
                         }
-                        o[this.name].push(this.value || '');
+                        o[this.username].push(this.value || '');
                     } else {
-                        o[this.name] = this.value || '';
+                        o[this.username] = this.value || '';
                     }
                 });
                 var fd =JSON.stringify(o);
-                console.log(fd);
+                console.log("login" + fd);
                 $.ajax
                 ({
                     type: "POST",
@@ -354,13 +354,13 @@
                 var o={};
                 var a = $('#registerForm').serializeArray();
                 $.each(a, function() {
-                    if (o[this.name] !== undefined) {
-                        if (!o[this.name].push) {
-                            o[this.name] = [o[this.name]];
+                    if (o[this.username] !== undefined) {
+                        if (!o[this.username].push) {
+                            o[this.username] = [o[this.username]];
                         }
-                        o[this.name].push(this.value || '');
+                        o[this.username].push(this.value || '');
                     } else {
-                        o[this.name] = this.value || '';
+                        o[this.username] = this.value || '';
                     }
                 });
                 var fd =JSON.stringify(o);
@@ -426,7 +426,7 @@
                 var json = {};
 
                 $.each(formItems, function() {
-                    json[this.name] = this.value || '';
+                    json[this.username] = this.value || '';
                 });
 
                 return json;
@@ -481,7 +481,7 @@
             <form id="logonForm" action="">
 
                 Name:<br>
-                <input type="text" name="name" value="">
+                <input type="text" name="username" value="">
                 <br>
                 Password:<br>
                 <input type="text" name="password" value="">
@@ -497,7 +497,7 @@
             <form id="registerForm" action="">
 
                 Name:<br>
-                <input type="text" name="name" value="">
+                <input type="text" name="username" value="">
                 <br>
                 Address:<br>
                 <input type="text" name="address" value="">

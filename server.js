@@ -13,7 +13,7 @@ var request      = require("request")
   , catalogue    = require("./api/catalogue")
   , orders       = require("./api/orders")
   , user         = require("./api/user")
-  , app          = express()
+  , app          = express();
 
 //app.use(express.logger());
 epimetheus.instrument(app);

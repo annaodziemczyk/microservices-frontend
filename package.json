@@ -15,7 +15,7 @@
     "express-formidable": "^1.2.0",
     "express-session": "^1.16.1",
     "finalhandler": "^0.4.1",
-    "jquery": "^1.9.1",
+    "jquery": "^3.5.0",
     "morgan": "^1.7.0",
     "popper.js": "^1.14.7",
     "prom-client": "^6.1.0",

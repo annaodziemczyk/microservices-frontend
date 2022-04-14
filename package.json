@@ -6,7 +6,7 @@
     "start": "server.js"
   },
   "dependencies": {
-    "async": "^1.5.2",
+    "async": "^3.2.2",
     "body-parser": "^1.15.1",
     "bootstrap": "^4.3.1",
     "cookie-parser": "^1.4.3",
